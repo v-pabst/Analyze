@@ -1,0 +1,72 @@
+#include <iostream>
+#include <iomanip>
+#include <cstdlib>
+#include <ctime>
+#include <chrono>
+
+using namespace std;
+
+const int MAX_VALUE = 100;
+const int MAX_SIZE = 100000;
+const int REPEAT_CUONT = 10;
+
+void randarr(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        arr[i] = rand() % MAX_VALUE + 1;
+    }
+}
+
+void remover(int arr[], int size, int result[]) {
+    for (int i = 0; i < size; i++) {
+        result[i] = arr[i];
+    }
+    int resultSize = size;
+
+    for (int i = 0; i < resultSize; i++) {
+        for (int j = i + 1; j < resultSize; j++) {
+            if (result[i] == result[j]) {
+                for (int k = j; k < resultSize - i; k++) {
+                    result[k] = result[k + 1];
+                }
+                resultSize--;
+                j--;
+            }
+        }
+    }
+}
+
+void remover2(int arr[], int size, int result[]) {
+    int resultSize = 0;
+    
+    for (int i = 0; i < size; i++) {
+        bool dubl = false;
+        for (int j = 0; j < resultSize; j++) {
+            if (arr[i] == result[j]) {
+                dubl = true;
+                break;
+            }
+        }
+        if (!dubl) {
+            result[resultSize] = arr[i];
+            resultSize++;
+        }
+    }
+}
+
+void remover3(int arr[], int size, int result[]) {
+    bool used[MAX_VALUE + 1] = { false };
+    int resultSize = 0;
+
+    for (int i = 0; i < size; i++) {
+        int n = arr[i];
+        if (!used[n]) {
+            used[n] = true;
+            result[resultSize] = n;
+            resultSize++;
+        }
+    }
+}
+
+int main() {
+   return 0;
+}
