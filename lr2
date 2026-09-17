@@ -1,0 +1,150 @@
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+const int MAX_SIZE = 100;
+
+struct Set {
+    int data[MAX_SIZE];
+    int n = 0;
+};
+
+void push_back(Set& s, int v) {
+    if (s.n < MAX_SIZE) {
+        s.data[s.n] = v;
+        s.n++;
+    }
+}
+
+Set set_union(Set& a, Set& b) {
+    Set result;
+
+    int i = 0;
+    int j = 0;
+
+    while (i < a.n && j < b.n) {
+        if (a.data[i] < b.data[j]) {
+            push_back(result, a.data[i]);
+            i++;
+        }
+        else if (a.data[i] > b.data[j]) {
+            push_back(result, b.data[j]);
+            j++;
+        }
+        else {
+            push_back(result, a.data[i]);
+            i++; 
+            j++;
+        }
+    }
+
+    while (i < a.n) {
+        push_back(result, a.data[i]);
+        i++;
+    }
+
+    while (j < b.n) {
+        push_back(result, b.data[i]);
+        j++;
+    }
+
+    return result;
+}
+
+Set set_inter(Set& a, Set& b) {
+    Set result;
+
+    int i = 0;
+    int j = 0;
+
+    while (i < a.n && j < b.n) {
+        if (a.data[i] < b.data[j]) {
+            i++;
+        }
+        else if (a.data[i] > b.data[j]) {
+            j++;
+        }
+        else {
+            push_back(result, a.data[i]);
+            i++;
+            j++;
+        }
+    }
+
+    return result;
+}
+
+Set set_diff(Set& a, Set& b) {
+    Set result;
+
+    int i = 0;
+    int j = 0;
+
+    while (i < a.n && j < b.n) {
+        if (a.data[i] < b.data[j]) {
+            push_back(result, a.data[i]);
+            i++;
+        }
+        else if (a.data[i] > b.data[j]) {
+            j++;
+        }
+        else {
+            i++;
+            j++;
+        }
+    }
+
+    while (i < a.n) {
+        push_back(result, a.data[i]);
+        i++;
+    }      
+
+    return result;
+}
+
+void print_set(Set& a) {
+    cout << "{";
+    for (int i = 0; i < a.n; i++) {
+        cout << a.data[i];
+        if (i < a.n - 1) {
+            cout << ",";
+        }
+    }
+    cout << "}" << endl;
+}
+
+void print_set_to_file(ofstream& out, Set& s) {
+    out << " { ";
+    for (int i = 0; i < s.n; i++) {
+        out << s.data[i];
+        if (i < s.n - 1)
+            out << ", ";
+    }
+    out << " }" << endl;
+}
+
+int main()
+{     
+    Set a = { {1, 3, 5, 8, 10}, 5 };
+    Set b = { {1, 2, 4, 6, 9, 10}, 6 };
+
+    Set u = set_union(a, b);
+    Set i = set_inter(a, b);
+    Set d1 = set_diff(a, b);
+    Set d2 = set_diff(b, a);
+    
+    ofstream new_f("practice.txt");
+
+    print_set_to_file(new_f, u);
+    print_set_to_file(new_f, i);
+    print_set_to_file(new_f, d1);
+    print_set_to_file(new_f, d2);
+
+    print_set(u);
+    print_set(i);
+    print_set(d1);
+    print_set(d2);
+
+    return 0;               
+}
