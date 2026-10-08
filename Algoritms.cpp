@@ -111,13 +111,34 @@ Array hoareSort(Array arr) {
     return arr;
 }
 
-void print(Array arr) {
-    cout << "[";
-    for (int i = 0; i < SIZE; i++) {
-        cout << arr[i];
-        if (i < SIZE - 1) {cout << ",";}
+void shiftDown(Array& arr, int root, int heapSize) {
+    while (true) {
+        int largest = root;
+        int left = 2 * root + 1;
+        int right = 2 * root + 2;
+        if (left<heapSize && arr[left] > arr[largest]) {
+            largest = left;
+        }
+        if (right<heapSize && arr[right] > arr[largest]) {
+            largest = right;
+        }
+        if (largest == root) {
+            return;
+        }
+        swap(arr[root], arr[largest]);
+        root = largest;
     }
-    cout << "]" << endl;
+}
+
+Array heapSort(Array arr) {
+    for (int k = SIZE / 2 - 1; k >= 0; k--) {
+        shiftDown(arr, k, SIZE);
+    }
+    for (int k = SIZE-1; k > 0; k --) {
+        swap(arr[0], arr[k]);
+        shiftDown(arr, 0, k);
+    }
+    return arr;
 }
 
 void printArray(Array arr) {
